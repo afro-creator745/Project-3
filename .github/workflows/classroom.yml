@@ -1,0 +1,32 @@
+name: GitHub Classroom Workflow
+
+on:
+  push:
+    branches:
+      - '*'
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pytest
+
+      - name: Run autograding
+        uses: education/autograding@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
