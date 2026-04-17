@@ -2,12 +2,11 @@ import cpu_monitor
 import memory_monitor
 import network_monitor
 
-import (
-    ServiceUnavailableError,
-    DataCorruptionError,
-    ConnectionTimeoutError,
-    ThresholdExceededError
-)
+from exceptions import ServiceUnavailableError
+from exceptions import DataCorruptionError
+from exceptions import ConnectionTimeoutError
+from exceptions import ThresholdExceededError
+
 
 CPU_THRESHOLD = 80.0
 MEMORY_THRESHOLD = 75.0
