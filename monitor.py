@@ -1,3 +1,12 @@
+"""
+COMP 163 - Introduction to Programming
+Project: 3 System Health Monitor
+Name: Hakeem Cole
+GitHub Username: afro-creator745
+Date: 4/3/2026
+Description: Uses try-except-finally blocks to check monitor systems and form a report of the current data
+provided from the monitors
+"""
 import cpu_monitor
 import memory_monitor
 import network_monitor
