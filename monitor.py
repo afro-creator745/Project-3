@@ -81,3 +81,54 @@ def check_network():
 
     except ConnectionTimeoutError as error:
         return {"status": "ERROR", "data": str(error)}
+
+def run_checks():
+    """
+    Runs CPU, memory, and network checks.
+
+    Returns:
+        dict: A dictionary containing the results of all three checks.
+    """
+    results = {
+        "cpu": check_cpu(),
+        "memory": check_memory(),
+        "network": check_network()
+    }
+    return results
+
+def log_results(results, filepath):
+    """
+    Appends monitoring results to a log file.
+
+    Parameters:
+        results (dict): The results dictionary from run_checks().
+        filepath (str): The path to the log file.
+
+    Returns:
+        None
+    """
+    try:
+        with open(filepath, "a") as log_file:
+            log_file.write(generate_report(results))
+            log_file.write("\n")
+    finally:
+        with open(filepath, "a") as log_file:
+            log_file.write("Logging complete.\n")
+
+
+
+def generate_report(results):
+    """
+    Generates a formatted report string from monitoring results.
+
+    Parameters:
+        results (dict): The results dictionary from run_checks().
+
+    Returns:
+        str: A formatted multi-line report.
+    """
+    report = "System Health Report\n"
+    report += "CPU: " + str(results.get("cpu", {})) + "\n"
+    report += "Memory: " + str(results.get("memory", {})) + "\n"
+    report += "Network: " + str(results.get("network", {})) + "\n"
+    return report
