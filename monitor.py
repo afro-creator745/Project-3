@@ -132,3 +132,20 @@ def generate_report(results):
     report += "Memory: " + str(results.get("memory", {})) + "\n"
     report += "Network: " + str(results.get("network", {})) + "\n"
     return report
+
+
+def main():
+    """
+    Runs all system checks, prints the report, and logs results.
+
+    Returns:
+        None
+    """
+    results = run_checks()
+    report = generate_report(results)
+    print(report)
+    log_results(results, "monitor.log")
+
+
+if __name__ == "__main__":
+    main()
