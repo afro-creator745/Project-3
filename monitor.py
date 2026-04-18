@@ -14,7 +14,7 @@ CPU_THRESHOLD = 80.0
 MEMORY_THRESHOLD = 75.0
 NETWORK_THRESHOLD = 90.0
 
-def check_cpu():
+def check_cpu(simulate_error):
     """
     Checks CPU health metrics from the cpu_monitor module.
 
@@ -26,7 +26,7 @@ def check_cpu():
         ThresholdExceededError: If CPU usage exceeds CPU_THRESHOLD.
     """
     try:
-        data = cpu_monitor.get_cpu_metrics()
+        data = cpu_monitor.get_cpu_metrics(simulate_error)
 
         if data["usage_percent"] > CPU_THRESHOLD:
             raise ThresholdExceededError("CPU usage exceeded threshold")
@@ -37,7 +37,7 @@ def check_cpu():
         return {"status": "ERROR", "data": str(error)}
 
 
-def check_memory():
+def check_memory(simulate_error):
     """
     Checks memory health metrics from the memory_monitor module.
 
@@ -49,7 +49,7 @@ def check_memory():
         ThresholdExceededError: If memory usage exceeds MEMORY_THRESHOLD.
     """
     try:
-        data = memory_monitor.get_memory_metrics()
+        data = memory_monitor.get_memory_metrics(simulate_error)
 
         if data["usage_percent"] > MEMORY_THRESHOLD:
             raise ThresholdExceededError("Memory usage exceeded threshold")
@@ -60,7 +60,7 @@ def check_memory():
         return {"status": "ERROR", "data": str(error)}
 
 
-def check_network():
+def check_network(simulate_error):
     """
     Checks network health metrics from the network_monitor module.
 
@@ -72,7 +72,7 @@ def check_network():
         ThresholdExceededError: If network usage exceeds NETWORK_THRESHOLD.
     """
     try:
-        data = network_monitor.get_network_metrics()
+        data = network_monitor.get_network_metrics(simulate_error)
 
         if data["usage_percent"] > NETWORK_THRESHOLD:
             raise ThresholdExceededError("Network usage exceeded threshold")
@@ -82,7 +82,7 @@ def check_network():
     except ConnectionTimeoutError as error:
         return {"status": "ERROR", "data": str(error)}
 
-def run_checks():
+def run_checks(simulate_error=False):
     """
     Runs CPU, memory, and network checks.
 
@@ -90,9 +90,9 @@ def run_checks():
         dict: A dictionary containing the results of all three checks.
     """
     results = {
-        "cpu": check_cpu(),
-        "memory": check_memory(),
-        "network": check_network()
+        "cpu": check_cpu(simulate_error),
+        "memory": check_memory(simulate_error),
+        "network": check_network(simulate_error)
     }
     return results
 
@@ -142,6 +142,11 @@ def main():
         None
     """
     results = run_checks()
+    report = generate_report(results)
+    print(report)
+    log_results(results, "monitor.log")
+
+    results = run_checks(True)
     report = generate_report(results)
     print(report)
     log_results(results, "monitor.log")
